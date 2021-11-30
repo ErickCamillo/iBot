@@ -1,7 +1,10 @@
 from sys import platform, stderr
 from os.path import basename
+import os
 from subprocess import CalledProcessError, check_output
 from re import findall
+#Add selenium para checkar a versão e fazer download dela
+from selenium import webdriver
 
 class GetBrowserInfoException(Exception):
     def __init__(self):
@@ -68,9 +71,16 @@ def GetBrowserInfo():
     defaultbrowser = __GetDefaultBrowser()
     if defaultbrowser == None:
         raise GetBrowserInfoException    
-
+ 
     browserinfo = __GetBrowserVersion(defaultbrowser)
     if browserinfo == None:
         raise GetBrowserInfoException
 
     return browserinfo
+
+def createDir():
+        #Criando directorio para adicionar o drive baixado
+    directory = "drive"
+    path = os.path.join(directory)
+    os.mkdir(path)
+    print("O repositório foi criado com sucesso...", " " , directory)
