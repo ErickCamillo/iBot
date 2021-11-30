@@ -1,4 +1,3 @@
-from posixpath import basename
 from sys import platform, stderr
 from os.path import basename
 from subprocess import CalledProcessError, check_output
