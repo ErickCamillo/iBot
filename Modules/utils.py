@@ -1,7 +1,17 @@
 from sys import platform, stderr
 from os.path import basename
+from os import getenv
 from subprocess import CalledProcessError, check_output
 from re import findall
+from pathlib import Path
+from json import dump
+
+if platform == 'linux' or platform == 'linux2':
+    DEFAULT_PATH = getenv('HOME') + '/.ibot'
+elif platform == 'win32':
+    DEFAULT_PATH = getenv('USERPROFILE') + '/ibot/'
+
+WEBDRIVER_PATH = DEFAULT_PATH + 'webdriver/'
 
 class GetBrowserInfoException(Exception):
     def __init__(self):
@@ -38,13 +48,13 @@ def __GetDefaultBrowser():
             return None
         else:
             browser_name = basename(browser_path).split('.')[0]
-            return {'id':browser_id , 'path':browser_path , 'name':browser_name}
+            return {'path':browser_path , 'name':browser_name , 'os':platform}
 
 def __GetBrowserVersion(Browser):
 
     if platform == 'linux' or platform == 'linux2':
         browser_info = Browser.split(' ')
-        return {'name':browser_info[1], 'version':browser_info[2]}
+        return {'name':browser_info[1].lower(), 'version':browser_info[2] , 'os':platform}
     elif platform == 'win32':
         try:
             # Obtendo a versão do browser padrão, via linha de comando
@@ -74,3 +84,16 @@ def GetBrowserInfo():
         raise GetBrowserInfoException
 
     return browserinfo
+
+def CreateDefaultPath():
+
+    path = Path(WEBDRIVER_PATH)
+    try:
+        path.mkdir(parents=True)
+    except FileExistsError:
+        return False
+    else:
+        with open(DEFAULT_PATH + 'webdriverconfig.json', 'w') as jsonfile:
+            jsonobj = {'webdriver':'null'}
+            dump(jsonobj , jsonfile)
+        return True
