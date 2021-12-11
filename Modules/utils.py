@@ -7,7 +7,7 @@ from pathlib import Path
 from json import dump
 
 if platform == 'linux' or platform == 'linux2':
-    DEFAULT_PATH = getenv('HOME') + '/.ibot'
+    DEFAULT_PATH = getenv('HOME') + '/.ibot/'
 elif platform == 'win32':
     DEFAULT_PATH = getenv('USERPROFILE') + '/ibot/'
 
@@ -93,7 +93,7 @@ def CreateDefaultPath():
     except FileExistsError:
         return False
     else:
-        with open(DEFAULT_PATH + 'webdriverconfig.json', 'w') as jsonfile:
+        with open(DEFAULT_PATH + 'config.json', 'w') as jsonfile:
             jsonobj = {'webdriver':'null'}
             dump(jsonobj , jsonfile)
         return True
