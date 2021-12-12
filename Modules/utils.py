@@ -12,6 +12,7 @@ elif platform == 'win32':
     DEFAULT_PATH = getenv('USERPROFILE') + '/ibot/'
 
 WEBDRIVER_PATH = DEFAULT_PATH + 'webdriver/'
+CONFIG_FILE_NAME = 'config.json'
 
 class GetBrowserInfoException(Exception):
     def __init__(self):
@@ -93,7 +94,7 @@ def CreateDefaultPath():
     except FileExistsError:
         return False
     else:
-        with open(DEFAULT_PATH + 'config.json', 'w') as jsonfile:
+        with open(DEFAULT_PATH + CONFIG_FILE_NAME, 'w') as jsonfile:
             jsonobj = {'webdriver':'null'}
             dump(jsonobj , jsonfile)
         return True
