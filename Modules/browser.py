@@ -1,8 +1,10 @@
 from sys import stderr
 from requests import Session
 from bs4 import BeautifulSoup
-from Modules.utils import GetBrowserInfo, GetBrowserInfoException, WEBDRIVER_PATH
+from Modules.utils import GetBrowserInfo, GetBrowserInfoException, WEBDRIVER_PATH, CONFIG_FILE_NAME, DEFAULT_PATH
 from re import search
+from json import load
+from os.path import basename
 
 BROWSERS_LIST = \
 [
@@ -57,6 +59,19 @@ def __PageParser(browser_info , page):
                 url_download = span.a['href'] + webdriver_title
                 url_download = url_download.replace('index.html?path=', '')
                 return (webdriver_title , url_download)
+    
+    elif browser_info['name'] == 'msedge':
+        elements_p = page.find_all('p', class_='driver-download__meta')
+        for p in elements_p:
+            webdriver_version = p.text
+            webdriver_version_firstnumber = search(r'([0-9])+', webdriver_version).group(0)
+            browser_version_firstnumber = search(r'([0-9])+', browser_info['version']).group(0)
+            if browser_version_firstnumber == webdriver_version_firstnumber:
+                for a in p.find_all('a'):
+                    if a.text == 'x64':
+                        url_download = a['href']
+                        webdriver_title = basename(url_download)
+                        return (webdriver_title , url_download)
                 
 def __DownloadWebDriver(browser_info):
 
@@ -78,6 +93,17 @@ def __DownloadWebDriver(browser_info):
         file.write(driver.content)
 
     return 200
+
+# Caso o webdriver seja configurado com sucesso no arquivo config.json, retorna o caminho do webdriver
+def GetWebdriverPath():
+
+    try:
+        with open(DEFAULT_PATH + CONFIG_FILE_NAME, 'r') as file:
+            config = load(file)
+    except FileNotFoundError:
+        return FileNotFoundError
+    else:
+        return config['webdriver']
 
 def SetWebdriverConfig():
 
