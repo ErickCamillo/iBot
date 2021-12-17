@@ -106,7 +106,8 @@ class WebDriverConfig(WebDriverUtils):
             jsonobj = {'webdriver':path , 'browser':browser_name}
             dump(jsonobj , jsonfile , indent=4)
 
-    # Caso o webdriver seja configurado com sucesso no arquivo config.json, retorna o caminho do webdriver
+    # Caso o webdriver seja configurado com sucesso no arquivo config.json, 
+    # retorna o caminho do webdriver e o nome do navegador
     def GetWebdriverConfig(self):
 
         try:
