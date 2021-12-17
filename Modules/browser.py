@@ -86,7 +86,7 @@ class WebDriverConfig(WebDriverUtils):
         if response.status_code != 200:
             print('[ERRO] Não foi possivel acessar a pagina de download do webdriver: {0}:{1}'
             .format(browser_info['name'] , browser_info['link']), file=stderr)
-            return response.status_code
+            return (response.status_code, None)
 
         page = BeautifulSoup(response.text , 'html.parser')
 
@@ -94,20 +94,20 @@ class WebDriverConfig(WebDriverUtils):
         driver = request.get(url_download)
         if driver.status_code != 200:
             print('[ERRO] Não foi possivel fazer o download do webdriver: {}'.format(webdriver_name), file=stderr)
-            return driver.status_code
+            return (driver.status_code,None)
         with open(self.WEBDRIVER_PATH + webdriver_name , 'wb') as file:
             file.write(driver.content)
 
         return (200, webdriver_name)
 
-    def __SetWebdriverPath(self, path):
+    def __SetWebdriverInfo(self, path , browser_name):
 
         with open(self.DEFAULT_PATH + self.CONFIG_FILE_NAME, 'w') as jsonfile:
-            jsonobj = {'webdriver':'{}'.format(path)}
-            dump(jsonobj , jsonfile)
+            jsonobj = {'webdriver':path , 'browser':browser_name}
+            dump(jsonobj , jsonfile , indent=4)
 
     # Caso o webdriver seja configurado com sucesso no arquivo config.json, retorna o caminho do webdriver
-    def GetWebdriverPath(self):
+    def GetWebdriverConfig(self):
 
         try:
             with open(self.DEFAULT_PATH + self.CONFIG_FILE_NAME, 'r') as file:
@@ -115,7 +115,7 @@ class WebDriverConfig(WebDriverUtils):
         except FileNotFoundError:
             raise FileNotFoundError
         else:
-            return config['webdriver']
+            return config
 
     def SetWebdriverConfig(self):
 
@@ -132,4 +132,5 @@ class WebDriverConfig(WebDriverUtils):
                 return False
             else:
                 full_path = self.ExtractFile(self.WEBDRIVER_PATH + webdriver_name)
-                self.__SetWebdriverPath(full_path)
+                self.__SetWebdriverInfo(full_path, browserinfo['name'])
+                return (True, {'webdriver':full_path , 'browser':browserinfo['name']})

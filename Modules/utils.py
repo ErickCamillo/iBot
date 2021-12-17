@@ -101,8 +101,8 @@ class WebDriverUtils:
             return False
         else:
             with open(self.DEFAULT_PATH + self.CONFIG_FILE_NAME, 'w') as jsonfile:
-                jsonobj = {'webdriver':'null'}
-                dump(jsonobj , jsonfile)
+                jsonobj = {'webdriver':'null' , 'browser': 'null'}
+                dump(jsonobj , jsonfile, indent=4)
             return True
 
     def ExtractFile(self,filename):
