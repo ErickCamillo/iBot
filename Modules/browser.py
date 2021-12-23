@@ -1,9 +1,11 @@
-from sys import stderr
+from sys import executable, stderr
 from requests import Session
 from bs4 import BeautifulSoup
 from re import search
 from json import load, dump
 from os.path import basename
+from selenium import webdriver
+from selenium.webdriver import Firefox , Chrome, Edge
 from Modules.utils import  WebDriverUtils ,GetBrowserInfoException
 
 BROWSERS_LIST = \
@@ -135,3 +137,16 @@ class WebDriverConfig(WebDriverUtils):
                 full_path = self.ExtractFile(self.WEBDRIVER_PATH + webdriver_name)
                 self.__SetWebdriverInfo(full_path, browserinfo['name'])
                 return (True, {'webdriver':full_path , 'browser':browserinfo['name']})
+
+    # Cria uma instancia do webdriver de acordo com o webdriver configurado
+    # No arquivo DEFAULT_PATH/config.json
+    def WebDriver(self, wdinfo):
+       
+        webdrivers = [{'name':'firefox','instance':Firefox},
+                     {'name':'chrome', 'instance':Chrome},
+                     {'name':'msedge', 'instance':Edge}]
+
+        for webdriver in webdrivers:
+            if webdriver['name'] == wdinfo['browser']:
+                driver = webdriver['instance']
+                return driver(executable_path=wdinfo['webdriver'])
