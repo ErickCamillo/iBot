@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 from re import search
 from json import load, dump
 from os.path import basename
-from selenium import webdriver
 from selenium.webdriver import Firefox , Chrome, Edge
 from Modules.utils import  WebDriverUtils ,GetBrowserInfoException
 
