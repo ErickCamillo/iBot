@@ -1,4 +1,4 @@
-from sys import executable, stderr
+from sys import stderr
 from requests import Session
 from bs4 import BeautifulSoup
 from re import search
