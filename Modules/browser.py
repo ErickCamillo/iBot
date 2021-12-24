@@ -149,3 +149,5 @@ class WebDriverConfig(WebDriverUtils):
             if webdriver['name'] == wdinfo['browser']:
                 driver = webdriver['instance']
                 return driver(executable_path=wdinfo['webdriver'])
+        
+        return None
