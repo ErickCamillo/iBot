@@ -109,7 +109,7 @@ class WebDriverConfig(WebDriverUtils):
 
     # Caso o webdriver seja configurado com sucesso no arquivo config.json, 
     # retorna o caminho do webdriver e o nome do navegador
-    def GetWebdriverConfig(self):
+    def GetWebdriverInfo(self):
 
         try:
             with open(self.DEFAULT_PATH + self.CONFIG_FILE_NAME, 'r') as file:
@@ -151,3 +151,7 @@ class WebDriverConfig(WebDriverUtils):
                 return driver(executable_path=wdinfo['webdriver'])
         
         return None
+
+# Usando a maior quantidade de tecnicas para não ser detectado como bot
+class UndectableMode:
+    pass
