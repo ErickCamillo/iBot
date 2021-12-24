@@ -146,7 +146,7 @@ class WebDriverConfig(WebDriverUtils):
                      {'name':'msedge', 'instance':Edge}]
 
         for webdriver in webdrivers:
-            if webdriver['name'] == wdinfo['browser']:
+            if webdriver['name'] == wdinfo['browser'].lower():
                 driver = webdriver['instance']
                 return driver(executable_path=wdinfo['webdriver'])
         
