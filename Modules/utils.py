@@ -111,7 +111,7 @@ class WebDriverUtils:
             with tar_open(filename) as file:
                 for member in file.getnames():
                     full_path = self.WEBDRIVER_PATH + member
-                    file.extractall(path=self.WEBDRIVER_PATH)
+                    file.extract(member, path=self.WEBDRIVER_PATH)
         else:
             with ZipFile(filename) as file:
                 if 'edgedriver' in filename: # Implementado o uso do webdriver edge apenas no windows
